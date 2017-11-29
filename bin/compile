@@ -50,16 +50,9 @@ PUBLIC_KEY=$(cat "$ENV_DIR/EJSON_PUBLIC_KEY")
 PRIVATE_KEY=$(cat "$ENV_DIR/EJSON_PRIVATE_KEY")
 echo "$PRIVATE_KEY" > "$EJSON_KEYDIR/$PUBLIC_KEY"
 
-if [ ! -s "$ENV_DIR/EJSON_ENVIRONMENT" ]; then
-  PREDICATE="( -name *.ejson ) -and -not ( -name *.*.ejson )"
-  EXTENSION=".ejson"
-  heading "EJSON_ENVIRONMENT is undefined or empty; enumerating and decrypting EJSON files of the form \`*.ejson\`"
-else
-  ENVIRONMENT=$(cat "$ENV_DIR/EJSON_ENVIRONMENT")
-  EXTENSION=".$ENVIRONMENT.ejson"
-  PREDICATE="( -name *$EXTENSION )"
-  heading "EJSON_ENVIRONMENT is \`$ENVIRONMENT\`; enumerating and decrypting EJSON files of the form \`*.$ENVIRONMENT.ejson\`"
-fi
+PREDICATE="( -name *.ejson )"
+EXTENSION=".ejson"
+heading "EJSON_ENVIRONMENT is undefined or empty; enumerating and decrypting EJSON files of the form \`*.ejson\`"
 
 COUNTER=0
 for FILE in $(find "$BUILD_DIR" $PREDICATE); do
